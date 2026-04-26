@@ -491,7 +491,7 @@ INDEX_TEMPLATE = '''
                         </select>
                     </div>
                     <div class="form-field">
-                        <select name="product_id" id="productSelect" required onchange="if(this.value) window.location.href = window.location.pathname + '?p=1310&product_id=' + this.value;">
+                        <select name="product_id" id="productSelect" required onchange="if(this.value) window.location.href = window.location.pathname + '?p=0000&product_id=' + this.value;">
                             <option value="">🛒 Товар</option>
                             {% for product in all_products %}
                             <option value="{{ product[0] }}" data-input-unit="{{ product[2] }}" {% if selected_product_id == product[0] %}selected{% endif %}>
@@ -563,7 +563,7 @@ INDEX_TEMPLATE = '''
             <button class="tab-button" onclick="switchTab('products')">🛒 Товары</button>
             <button class="tab-button" onclick="switchTab('stores')">🏪 Магазины</button>
             <button class="tab-button" onclick="switchTab('units')">📏 Единицы измерений</button>
-            <a href="/price/report?p=1310" class="btn-link">📈 Отчёт за год</a>
+            <a href="/price/report?p=0000" class="btn-link">📈 Отчёт за год</a>
         </div>
         
         <div id="productsSection" class="reference-section">
@@ -944,7 +944,7 @@ REPORT_TEMPLATE = '''
     
     <div class="container">
         <div class="nav-links">
-            <a href="/price/?p=1310" class="btn-link">🛒 Сравнение цен</a>
+            <a href="/price/?p=0000" class="btn-link">🛒 Сравнение цен</a>
         </div>
         
         <div class="header">
@@ -961,7 +961,7 @@ REPORT_TEMPLATE = '''
             {% if report_data %}
             <div class="chart-container">
                 <h3>📈 Детализация: 
-                    <select onchange="if(this.value) window.location.href = window.location.pathname + '?p=1310&product_id=' + this.value;" style="padding:6px 10px;border-radius:6px;border:1px solid #ddd;font-size:14px;">
+                    <select onchange="if(this.value) window.location.href = window.location.pathname + '?p=0000&product_id=' + this.value;" style="padding:6px 10px;border-radius:6px;border:1px solid #ddd;font-size:14px;">
                         {% for product in all_products %}
                         <option value="{{ product[0] }}" {% if selected_product_id == product[0] %}selected{% endif %}>{{ product[1] }}</option>
                         {% endfor %}
@@ -1054,7 +1054,7 @@ def favicon():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     password = request.args.get('p') or request.form.get('p')
-    if password != '1310':
+    if password != '0000':
         return '''
         <!DOCTYPE html>
         <html lang="ru">
@@ -1148,7 +1148,7 @@ def index():
                          (store_id, product_id, brand if brand else None, measure_value, price, price_per_compare))
                 conn.commit()
             conn.close()
-            return redirect(f"?p=1310&product_id={product_id}")
+            return redirect(f"?p=0000&product_id={product_id}")
     
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
@@ -1210,7 +1210,7 @@ def delete_entry():
 @app.route('/report')
 def report():
     password = request.args.get('p')
-    if password != '1310':
+    if password != '0000':
         return '''<html><body style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;background:#f5f5f5;"><h2 style="color:#999;">Доступ запрещён</h2></body></html>''', 403
     
     selected_product_id = request.args.get('product_id')
